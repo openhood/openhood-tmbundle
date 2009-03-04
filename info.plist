@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Openhood</string>
+	<key>ordering</key>
+	<array>
+		<string>FDE4E691-5F32-4E3B-9A3D-5C05AAD39D31</string>
+		<string>8DCF7C3A-BB0B-4720-95BA-86D444C1DDE4</string>
+		<string>DB768186-2044-4F1D-AD64-9A47814B62F7</string>
+	</array>
+	<key>uuid</key>
+	<string>A21E5BCD-03C2-4ED8-A84E-1FA557043792</string>
+</dict>
+</plist>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require "rubygems"
+require "activesupport"
+require File.join(ENV["TM_SUPPORT_PATH"], "lib", "exit_codes")
+filename = File.basename ENV["TM_FILEPATH"]
+matches = filename.match /\A(.*)_controller\.rb\Z/u
+TextMate.exit_show_tool_tip "Error: you don't seem to be in a controller." if matches.nil?
+model = matches[1].classify
+table_name = model.tableize
+singular = table_name.singularize
+print &lt;&lt;-eos
+
+  before_filter :current_object, :only =&gt; [:show, :edit, :update, :destroy]
+  before_filter :build_object, :only =&gt; [:new, :create]
+
+  def index
+    @#{table_name} = #{model}.sorted.all
+  end
+  
+  def show
+  end
+
+  def new
+  end
+
+  def edit
+  end
+
+  def create
+    if @#{singular}.save
+      flash[:notice] = "#{model} was successfully created."
+      redirect_to_index
+    else
+      render :action =&gt; "new"
+    end
+  end
+
+  def update
+    if @#{singular}.update_attributes(params[:#{singular}])
+      flash[:notice] = "#{model} was successfully updated."
+      redirect_to_index
+    else
+      render :action =&gt; "edit"
+    end
+  end
+
+  def destroy
+    flash[:notice] = "#{model} was successfully deleted."
+    @retailer.destroy
+    redirect_to_index
+  end
+
+private
+
+  def current_object
+    @#{singular} = #{model}.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    flash[:error] = "Error: #{model} could not be found."
+    redirect_to_index
+  end
+
+  def build_object
+    @#{singular} = #{model}.new(params[:#{singular}])
+  end
+
+  def redirect_to_index
+    redirect_to :action =&gt; "index"
+  end
+eos</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^ </string>
+	<key>name</key>
+	<string>Simple scaffold</string>
+	<key>output</key>
+	<string>afterSelectedText</string>
+	<key>scope</key>
+	<string>source.ruby, source.ruby.rails</string>
+	<key>uuid</key>
+	<string>FDE4E691-5F32-4E3B-9A3D-5C05AAD39D31</string>
+</dict>
+</plist>
