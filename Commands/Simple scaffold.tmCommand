@@ -6,11 +6,9 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
-require "rubygems"
-require "activesupport"
 require File.join(ENV["TM_SUPPORT_PATH"], "lib", "exit_codes")
-filename = File.basename ENV["TM_FILEPATH"]
-matches = filename.match /\A(.*)_controller\.rb\Z/u
+require File.join(ENV['TM_BUNDLE_SUPPORT'], "lib", "dependencies")
+matches = ENV["TM_FILENAME"].to_s.match /\A(.*)_controller\.rb\Z/u
 TextMate.exit_show_tool_tip "Error: you don't seem to be in a controller." if matches.nil?
 model = matches[1].classify
 table_name = model.tableize
