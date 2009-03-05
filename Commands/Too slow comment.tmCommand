@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+list = []
+list &lt;&lt; "`@_/ºº REALLY TOO "
+list &lt;&lt; "`_@/ºº S...L..O.. "
+list &lt;&lt; "°l°(,,,,); DAMNLY "
+puts "# FIXME " + list.sort_by{ rand }.shift + "SLOW\n"</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^ </string>
+	<key>name</key>
+	<string>Too slow comment</string>
+	<key>output</key>
+	<string>afterSelectedText</string>
+	<key>scope</key>
+	<string>source.ruby, source.ruby.rails</string>
+	<key>uuid</key>
+	<string>ABC8A208-FF79-4E22-A919-7B645345667A</string>
+</dict>
+</plist>
