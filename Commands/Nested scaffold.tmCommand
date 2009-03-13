@@ -57,7 +57,7 @@ print &lt;&lt;-eos
 
   def destroy
     flash[:notice] = "#{model} was successfully deleted."
-    @retailer.destroy
+    @#{singular}.destroy
     redirect_to_index
   end
 
