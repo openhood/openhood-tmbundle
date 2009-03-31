@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require File.join(ENV["TM_SUPPORT_PATH"], "lib", "exit_codes")
+require File.join(ENV["TM_BUNDLE_SUPPORT"], "lib", "dependencies")
+TextMate.exit_show_tool_tip "Error: you must be inside a Rails project to use this command." if ENV["TM_PROJECT_DIRECTORY"].blank?
+if ENV["TM_FILEPATH"]=~Regexp.new("^#{Regexp.escape ENV["TM_PROJECT_DIRECTORY"]}[/\\\\](.+)$")
+  filename = $1
+else
+  TextMate.exit_show_tool_tip "Error: current file is outside of current project."
+end
+line = ENV["TM_LINE_NUMBER"].to_i
+TextMate.exit_show_tool_tip "Error: you must have the carret inside the editor to run this command." if line.zero?
+cmd = "cd #{RAILS_ROOT};/opt/ruby-enterprise-1.8.6-20090201/bin/ruby ./script/cucumber -r features #{filename}:#{line} --format html"
+TextMate.exit_show_html `#{cmd}`</string>
+	<key>fallbackInput</key>
+	<string>document</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^ </string>
+	<key>name</key>
+	<string>Run Cucumber Scenario</string>
+	<key>output</key>
+	<string>discard</string>
+	<key>scope</key>
+	<string>text.cucumber.feature</string>
+	<key>uuid</key>
+	<string>93BC47AA-DC38-4617-925D-63432612A00B</string>
+</dict>
+</plist>

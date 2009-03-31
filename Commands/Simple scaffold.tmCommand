@@ -7,7 +7,7 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
 require File.join(ENV["TM_SUPPORT_PATH"], "lib", "exit_codes")
-require File.join(ENV['TM_BUNDLE_SUPPORT'], "lib", "dependencies")
+require File.join(ENV["TM_BUNDLE_SUPPORT"], "lib", "dependencies")
 matches = ENV["TM_FILENAME"].to_s.match /\A(.*)_controller\.rb\Z/u
 TextMate.exit_show_tool_tip "Error: you don't seem to be in a controller." if matches.nil?
 model = matches[1].classify
