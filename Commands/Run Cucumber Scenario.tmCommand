@@ -16,7 +16,7 @@ else
 end
 line = ENV["TM_LINE_NUMBER"].to_i
 TextMate.exit_show_tool_tip "Error: you must have the carret inside the editor to run this command." if line.zero?
-cmd = "cd #{RAILS_ROOT};/opt/ruby-enterprise-1.8.6-20090201/bin/ruby ./script/cucumber -r features #{filename}:#{line} --format html"
+cmd = "cd #{RAILS_ROOT};\"#{File.join ENV["TM_BUNDLE_SUPPORT"], "ruby"}\" ./script/cucumber -r features #{filename}:#{line} --format html"
 TextMate.exit_show_html `#{cmd}`</string>
 	<key>fallbackInput</key>
 	<string>document</string>
