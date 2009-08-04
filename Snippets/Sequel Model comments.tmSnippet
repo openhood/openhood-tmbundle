@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+  # ~~~ plugins ~~~
+  
+  # ~~~ virtual attributes ~~~
+
+  # ~~~ constants ~~~
+
+  # ~~~ before/after filters ~~~
+
+  # ~~~ links ~~~
+
+  # ~~~ validations ~~~
+
+  # ~~~ special behaviours ~~~
+
+  # ~~~ named scopes ~~~
+
+  # ~~~ custom class methods ~~~
+
+  # ~~~ custom instance methods ~~~
+	<string>
+</string>
+	<key>keyEquivalent</key>
+	<string>^ </string>
+	<key>name</key>
+	<string>Sequel Model comments</string>
+	<key>scope</key>
+	<string>source.ruby, source.ruby.rails</string>
+	<key>uuid</key>
+	<string>DB768186-2044-4F1D-AD64-9A47814B62F8</string>
+</dict>
+</plist>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+  describe "DB" do
+  
+  end
+
+  describe "Associations" do
+    
+  end
+
+  describe "Validations" do
+    
+  end
+
+  describe "Named Scopes" do
+    
+  end
+	<string>
+</string>
+	<key>keyEquivalent</key>
+	<string>^ </string>
+	<key>name</key>
+	<string>RSpec Model describes</string>
+	<key>scope</key>
+	<string>source.ruby.rspec</string>
+	<key>uuid</key>
+	<string>DB768186-2044-4F1D-AD64-9A47814B62F9</string>
+</dict>
+</plist>
