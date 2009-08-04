@@ -3,6 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
+	<string>
   describe "DB" do
   
   end
@@ -17,9 +18,7 @@
 
   describe "Named Scopes" do
     
-  end
-	<string>
-</string>
+  end</string>
 	<key>keyEquivalent</key>
 	<string>^ </string>
 	<key>name</key>
@@ -27,6 +26,6 @@
 	<key>scope</key>
 	<string>source.ruby.rspec</string>
 	<key>uuid</key>
-	<string>DB768186-2044-4F1D-AD64-9A47814B62F9</string>
+	<string>067E8C52-0398-43D6-A14C-65A6E75A033E</string>
 </dict>
 </plist>

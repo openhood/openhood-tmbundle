@@ -3,6 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
+	<string>
   # ~~~ plugins ~~~
   
   # ~~~ virtual attributes ~~~
@@ -22,15 +23,14 @@
   # ~~~ custom class methods ~~~
 
   # ~~~ custom instance methods ~~~
-	<string>
 </string>
 	<key>keyEquivalent</key>
 	<string>^ </string>
 	<key>name</key>
 	<string>Sequel Model comments</string>
 	<key>scope</key>
-	<string>source.ruby, source.ruby.rails</string>
+	<string>source.ruby</string>
 	<key>uuid</key>
-	<string>DB768186-2044-4F1D-AD64-9A47814B62F8</string>
+	<string>C4E62D9F-7463-4AE0-B969-D254879D8CC9</string>
 </dict>
 </plist>
