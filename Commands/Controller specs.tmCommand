@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require File.join(ENV["TM_SUPPORT_PATH"], "lib", "exit_codes")
+require File.join(ENV["TM_BUNDLE_SUPPORT"], "lib", "dependencies")
+fullpath = File.join(ENV["TM_DIRECTORY"].to_s, ENV["TM_FILENAME"].to_s)
+matches = fullpath.match /\/controllers\/(.*)_controller_spec\.rb\Z/u
+TextMate.exit_show_tool_tip "Error: you don't seem to be in a controller spec." if matches.nil?
+
+controller_path = matches[1]
+controller_class = "#{controller_path}_controller".classify
+print &lt;&lt;-eos
+require File.dirname(__FILE__) + "/../../spec_helper"
+
+describe #{controller_class} do
+  include ActionAccessMatchers
+
+  describe "routes" do
+    should_route :get, "/#{controller_path}", :controller =&gt; "#{controller_path}", :action =&gt; :index
+    should_route :get, "/#{controller_path}/1", :controller =&gt; "#{controller_path}", :action =&gt; :show, :id =&gt; 1
+    should_route :get, "/#{controller_path}/new", :controller =&gt; "#{controller_path}", :action =&gt; :new
+    should_route :post, "/#{controller_path}", :controller =&gt; "#{controller_path}", :action =&gt; :create
+    should_route :get, "/#{controller_path}/1/edit", :controller =&gt; "#{controller_path}", :action =&gt; :edit, :id =&gt; 1
+    should_route :put, "/#{controller_path}/1", :controller =&gt; "#{controller_path}", :action =&gt; :update, :id =&gt; 1
+    should_route :delete, "/#{controller_path}/1", :controller =&gt; "#{controller_path}", :action =&gt; :destroy, :id =&gt; 1
+  end
+
+  describe "access rights" do
+    describe "when I'm not logged" do
+      should_prevent_access :get, :index
+      should_prevent_access :get, :show, :id =&gt; 1
+      should_prevent_access :get, :new
+      should_prevent_access :post, :create
+      should_prevent_access :put, :update, :id =&gt; 1
+      should_prevent_access :delete, :destroy, :id =&gt; 1
+    end
+    describe "when I'm logged in as client" do
+      before do
+        logged_in_as(mock_model(User, :is_kneip? =&gt; false, :time_zone =&gt; nil))
+      end      
+      should_not_prevent_access :get, :index
+      should_not_prevent_access :get, :show, :id =&gt; 1
+      should_not_prevent_access :get, :new
+      should_not_prevent_access :post, :create
+      should_not_prevent_access :put, :update, :id =&gt; 1
+      should_not_prevent_access :delete, :destroy, :id =&gt; 1
+    end
+    describe "when I'm logged in as Kneip" do
+      before do
+        logged_in_as(mock_model(User, :is_kneip? =&gt; true, :time_zone =&gt; nil, :selected_institution_id =&gt; nil))
+      end
+      should_not_prevent_access :get, :index
+      should_not_prevent_access :get, :show, :id =&gt; 1
+      should_not_prevent_access :get, :new
+      should_not_prevent_access :post, :create
+      should_not_prevent_access :put, :update, :id =&gt; 1
+      should_not_prevent_access :delete, :destroy, :id =&gt; 1
+    end
+  end
+
+end
+eos</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^ </string>
+	<key>name</key>
+	<string>Controller specs</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.ruby.rspec</string>
+	<key>uuid</key>
+	<string>8F289B04-A6DB-431D-999B-53BD6D0765A1</string>
+</dict>
+</plist>

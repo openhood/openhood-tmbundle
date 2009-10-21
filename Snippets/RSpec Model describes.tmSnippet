@@ -18,7 +18,20 @@
 
   describe "Named Scopes" do
     
-  end</string>
+  end
+
+  describe "Protected Attributes" do
+
+  end
+
+  describe "Class Methods" do
+
+  end
+
+  describe "Instance Methods" do
+
+  end
+</string>
 	<key>keyEquivalent</key>
 	<string>^ </string>
 	<key>name</key>
