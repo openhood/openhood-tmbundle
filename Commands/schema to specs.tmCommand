@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require File.join(ENV["TM_SUPPORT_PATH"], "lib", "exit_codes")
+require File.join(ENV["TM_BUNDLE_SUPPORT"], "lib", "dependencies")
+selected = ENV["TM_SELECTED_TEXT"].to_s
+output = []
+margin = " " * 4
+selected.split("\n").each do |line|
+  line.strip!
+  if line =~ /^t\.([^\s]+)\s+"([^"]+)"(.*)$/
+    converted = "should_have_column :#{$2}, :type =&gt; :#{$1}"
+    converted &lt;&lt; $3.gsub(/\s+/, " ") unless $3.nil?
+    output &lt;&lt; margin + converted
+  elsif line =~ /^add_index[^\[]+\["([^\]]+)"\]/
+    columns = $1.split('", "')
+    converted = "should_have_index " + if columns.size==1
+      ":#{columns.first}"
+    else
+      "[:#{columns.join(", :")}]"
+    end
+    output &lt;&lt; margin + converted
+  end
+end
+if output.empty?
+  TextMate.exit_show_tool_tip "Error: selected text doesn't match anything it should."
+else
+  puts output.join("\n")
+end</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^ </string>
+	<key>name</key>
+	<string>schema to specs</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.ruby.rspec</string>
+	<key>uuid</key>
+	<string>C0B1BE40-4FCF-4A0E-AE4B-DC032AB656CD</string>
+</dict>
+</plist>
