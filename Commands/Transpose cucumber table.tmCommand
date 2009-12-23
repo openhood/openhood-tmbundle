@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require File.join(ENV["TM_SUPPORT_PATH"], "lib", "exit_codes")
+require File.join(ENV["TM_BUNDLE_SUPPORT"], "lib", "dependencies")
+selected = ENV["TM_SELECTED_TEXT"]
+table = selected.split("\n").collect do |row|
+  row = row[/^\s*\|(.+)\|\s*$/, 1]
+  row.split(/\|/).collect(&amp;:strip) if row
+end
+table = table.compact.transpose
+out = ""
+cols = Hash.new(0)
+table.each do |row|
+  row.each_with_index do |col, i|
+    cols[i] = [cols[i], col.unpack("U*").length].max
+  end
+end
+table.each do |row|
+  row.each_with_index do |col, i|
+    row[i] = " #{col}#{" " * (cols[i] - col.unpack("U*").length + 1)}"
+  end
+  out &lt;&lt; "      |#{row.join("|")}|\n"
+end
+puts out</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^ </string>
+	<key>name</key>
+	<string>Transpose cucumber table</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>text.cucumber.feature</string>
+	<key>tabTrigger</key>
+	<string>show</string>
+	<key>uuid</key>
+	<string>B54F82BA-DF5F-4BC2-87DD-B20AB34E56AD</string>
+</dict>
+</plist>

@@ -50,12 +50,12 @@ out &lt;&lt; &lt;&lt;-eos
     describe "when I'm logged in as client without #{module_name} access" do
       before(:all) { @user = client_user("ABN AMRO", {}, []) }
       before{ logged_in_as(@user) }
-      should_not_prevent_access :get, :index
-      should_not_prevent_access :get, :show, :id =&gt; 1
-      should_not_prevent_access :get, :new
-      should_not_prevent_access :post, :create
-      should_not_prevent_access :put, :update, :id =&gt; 1
-      should_not_prevent_access :delete, :destroy, :id =&gt; 1
+      should_prevent_access :get, :index
+      should_prevent_access :get, :show, :id =&gt; 1
+      should_prevent_access :get, :new
+      should_prevent_access :post, :create
+      should_prevent_access :put, :update, :id =&gt; 1
+      should_prevent_access :delete, :destroy, :id =&gt; 1
     end
 
     describe "when I'm logged in as client with #{module_name} access" do
