@@ -14,8 +14,11 @@ TextMate.exit_show_tool_tip "Error: you don't seem to be in a controller spec." 
 
 controller_path = matches[1]
 controller_class = "#{controller_path}_controller".classify
-print &lt;&lt;-eos
-require File.dirname(__FILE__) + "/../../spec_helper"
+module_name = controller_class[/([^:]+)::.+/, 1]
+module_name = module_name.underscore if module_name
+
+out = &lt;&lt;-eos
+require File.dirname(__FILE__) + "/#{"../" if module_name}../spec_helper"
 
 describe #{controller_class} do
   include ActionAccessMatchers
@@ -39,10 +42,14 @@ describe #{controller_class} do
       should_prevent_access :put, :update, :id =&gt; 1
       should_prevent_access :delete, :destroy, :id =&gt; 1
     end
-    describe "when I'm logged in as client" do
-      before do
-        logged_in_as(mock_model(User, :is_kneip? =&gt; false, :time_zone =&gt; nil))
-      end      
+
+eos
+
+if module_name
+out &lt;&lt; &lt;&lt;-eos
+    describe "when I'm logged in as client without #{module_name} access" do
+      before(:all) { @user = client_user("ABN AMRO", {}, []) }
+      before{ logged_in_as(@user) }
       should_not_prevent_access :get, :index
       should_not_prevent_access :get, :show, :id =&gt; 1
       should_not_prevent_access :get, :new
@@ -50,10 +57,38 @@ describe #{controller_class} do
       should_not_prevent_access :put, :update, :id =&gt; 1
       should_not_prevent_access :delete, :destroy, :id =&gt; 1
     end
+
+    describe "when I'm logged in as client with #{module_name} access" do
+      before(:all) { @user = client_user("ABN AMRO", {}, [{:module =&gt; "#{module_name.titleize}", :user_type =&gt; 0}]) }
+      before{ logged_in_as(@user) }
+      should_not_prevent_access :get, :index
+      should_not_prevent_access :get, :show, :id =&gt; 1
+      should_not_prevent_access :get, :new
+      should_not_prevent_access :post, :create
+      should_not_prevent_access :put, :update, :id =&gt; 1
+      should_not_prevent_access :delete, :destroy, :id =&gt; 1
+    end
+eos
+else
+out &lt;&lt; &lt;&lt;-eos
+    describe "when I'm logged in as client" do
+      before(:all) { @user = client_user("ABN AMRO", {}, []) }
+      before{ logged_in_as(@user) }
+      should_not_prevent_access :get, :index
+      should_not_prevent_access :get, :show, :id =&gt; 1
+      should_not_prevent_access :get, :new
+      should_not_prevent_access :post, :create
+      should_not_prevent_access :put, :update, :id =&gt; 1
+      should_not_prevent_access :delete, :destroy, :id =&gt; 1
+    end
+eos
+end
+
+out &lt;&lt; &lt;&lt;-eos
+
     describe "when I'm logged in as Kneip" do
-      before do
-        logged_in_as(mock_model(User, :is_kneip? =&gt; true, :time_zone =&gt; nil, :selected_institution_id =&gt; nil))
-      end
+      before(:all) { @user = kneip_user({}, [{:module =&gt; "#{module_name.titleize}", :user_type =&gt; 0}]) }
+      before{ logged_in_as(@user) }
       should_not_prevent_access :get, :index
       should_not_prevent_access :get, :show, :id =&gt; 1
       should_not_prevent_access :get, :new
@@ -64,7 +99,8 @@ describe #{controller_class} do
   end
 
 end
-eos</string>
+eos
+print out</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
