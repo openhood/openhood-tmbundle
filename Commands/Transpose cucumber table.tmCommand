@@ -38,8 +38,6 @@ puts out</string>
 	<string>replaceSelectedText</string>
 	<key>scope</key>
 	<string>text.cucumber.feature</string>
-	<key>tabTrigger</key>
-	<string>show</string>
 	<key>uuid</key>
 	<string>B54F82BA-DF5F-4BC2-87DD-B20AB34E56AD</string>
 </dict>
