@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>And show me the response</string>
+	<string>And show me the page</string>
 	<key>name</key>
-	<string>Show me the response</string>
+	<string>Show me the page</string>
 	<key>scope</key>
 	<string>text.cucumber.feature</string>
 	<key>tabTrigger</key>
