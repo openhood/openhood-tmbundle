@@ -18,7 +18,7 @@ module_name = controller_class[/([^:]+)::.+/, 1]
 module_name = module_name.underscore if module_name
 
 out = &lt;&lt;-eos
-require File.dirname(__FILE__) + "/#{"../" if module_name}../spec_helper"
+require File.dirname(__FILE__) + "/#{"../" * controller_class.split("::").size}../spec_helper"
 
 describe #{controller_class} do
   include ActionAccessMatchers
