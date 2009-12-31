@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require File.join(ENV["TM_SUPPORT_PATH"], "lib", "exit_codes")
+require File.join(ENV["TM_BUNDLE_SUPPORT"], "lib", "dependencies")
+
+class String
+  def trim(chars = '')
+    chars.size&gt;0 ? self.gsub(/\A[#{chars}]+|[#{chars}]+\z/, '') : self.strip
+  end
+  def to_nicer_sym
+    self.gsub(/[^\w]+/, "_").underscore.trim("_").to_sym
+  end
+end
+
+selected = ENV["TM_SELECTED_TEXT"].to_s
+underscore = selected.to_nicer_sym.to_s
+output = if selected==underscore
+  underscore.camelize
+else
+  underscore
+end
+TextMate.exit_replace_text output
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>underscore / camelize</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>uuid</key>
+	<string>94F5B86D-4108-4052-A112-FD906D68CF0C</string>
+</dict>
+</plist>

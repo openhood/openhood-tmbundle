@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require File.join(ENV["TM_SUPPORT_PATH"], "lib", "exit_codes")
+require File.join(ENV["TM_BUNDLE_SUPPORT"], "lib", "dependencies")
+fullpath = File.join(ENV["TM_DIRECTORY"].to_s, ENV["TM_FILENAME"].to_s)
+matches = fullpath.match /\/controllers\/(.*)_controller_spec\.rb\Z/u
+TextMate.exit_show_tool_tip "Error: you don't seem to be in a controller spec." if matches.nil?
+controller_path = matches[1]
+controller_url = controller_path.gsub "/corporate_actions/", "/corporate-actions/"
+controller_class = "#{controller_path}_controller".classify
+module_name = controller_class[/([^:]+)::.+/, 1]
+module_name = module_name.underscore if module_name
+module_title = module_name.titleize
+
+out = &lt;&lt;-eos
+require File.dirname(__FILE__) + "/#{"../" * controller_path.split("/").size}spec_helper"
+
+describe #{controller_class} do
+  include ActionAccessMatchers
+
+  describe "routes" do
+    should_route :get, "/#{controller_url}", :controller =&gt; "#{controller_path}", :action =&gt; :index
+    should_route :get, "/#{controller_url}/1", :controller =&gt; "#{controller_path}", :action =&gt; :show, :id =&gt; 1
+    should_route :get, "/#{controller_url}/new", :controller =&gt; "#{controller_path}", :action =&gt; :new
+    should_route :post, "/#{controller_url}", :controller =&gt; "#{controller_path}", :action =&gt; :create
+    should_route :get, "/#{controller_url}/1/edit", :controller =&gt; "#{controller_path}", :action =&gt; :edit, :id =&gt; 1
+    should_route :put, "/#{controller_url}/1", :controller =&gt; "#{controller_path}", :action =&gt; :update, :id =&gt; 1
+    should_route :delete, "/#{controller_url}/1", :controller =&gt; "#{controller_path}", :action =&gt; :destroy, :id =&gt; 1
+  end
+
+  describe "access rights" do
+    before(:all){ @right_level = RightLevel.make_from_full_name("#{module_title} / Function Group / Function / Full Authority") }
+    after(:all){ @right_level.destroy }
+
+    describe "when I'm not logged" do
+      should_prevent_access :get, :index
+      should_prevent_access :get, :show, :id =&gt; 1
+      should_prevent_access :get, :new
+      should_prevent_access :post, :create
+      should_prevent_access :put, :update, :id =&gt; 1
+      should_prevent_access :delete, :destroy, :id =&gt; 1
+    end
+
+eos
+
+if module_name
+out &lt;&lt; &lt;&lt;-eos
+    describe "when I'm logged in as client without #{module_name} access" do
+      before{ logged_in_as(@user = client_user("ABN AMRO", {}, [])) }
+      should_prevent_access :get, :index
+      should_prevent_access :get, :show, :id =&gt; 1
+      should_prevent_access :get, :new
+      should_prevent_access :post, :create
+      should_prevent_access :put, :update, :id =&gt; 1
+      should_prevent_access :delete, :destroy, :id =&gt; 1
+    end
+
+    describe "when I'm logged in as client with #{module_name} access" do
+      before{ logged_in_as(@user = client_user("ABN AMRO", {}, [{:module =&gt; "#{module_title}", :user_type =&gt; 0}])) }
+      describe "without #{module_title} / Function Group / Function / Full Authority right" do
+        should_prevent_access :get, :index
+        should_prevent_access :get, :show, :id =&gt; 1
+        should_prevent_access :get, :new
+        should_prevent_access :post, :create
+        should_prevent_access :put, :update, :id =&gt; 1
+        should_prevent_access :delete, :destroy, :id =&gt; 1
+      end
+      describe "with #{module_title} / Function Group / Function / Full Authority right" do
+        before{ Right.make :level =&gt; @right_level, :owner =&gt; @user, :target =&gt; Institution.find_by_name("ABN AMRO") }
+        should_not_prevent_access :get, :index
+        should_not_prevent_access :get, :show, :id =&gt; 1
+        should_not_prevent_access :get, :new
+        should_not_prevent_access :post, :create
+        should_not_prevent_access :put, :update, :id =&gt; 1
+        should_not_prevent_access :delete, :destroy, :id =&gt; 1
+      end
+    end
+
+    describe "when I'm logged in as Kneip" do
+      before{ logged_in_as(@user = kneip_user({}, [{:module =&gt; "#{module_title}", :user_type =&gt; 0}])) }
+      describe "without #{module_title} / Function Group / Function / Full Authority right" do
+        should_prevent_access :get, :index
+        should_prevent_access :get, :show, :id =&gt; 1
+        should_prevent_access :get, :new
+        should_prevent_access :post, :create
+        should_prevent_access :put, :update, :id =&gt; 1
+        should_prevent_access :delete, :destroy, :id =&gt; 1
+      end
+      describe "with #{module_title} / Function Group / Function / Full Authority right" do
+        before{ Right.make :level =&gt; @right_level, :owner =&gt; @user, :target =&gt; nil }
+        should_not_prevent_access :get, :index
+        should_not_prevent_access :get, :show, :id =&gt; 1
+        should_not_prevent_access :get, :new
+        should_not_prevent_access :post, :create
+        should_not_prevent_access :put, :update, :id =&gt; 1
+        should_not_prevent_access :delete, :destroy, :id =&gt; 1
+      end
+    end
+  end
+
+end
+eos
+else
+out &lt;&lt; &lt;&lt;-eos
+    describe "when I'm logged in as client" do
+      before{ logged_in_as(@user = client_user("ABN AMRO", {}, [])) }
+      should_not_prevent_access :get, :index
+      should_not_prevent_access :get, :show, :id =&gt; 1
+      should_not_prevent_access :get, :new
+      should_not_prevent_access :post, :create
+      should_not_prevent_access :put, :update, :id =&gt; 1
+      should_not_prevent_access :delete, :destroy, :id =&gt; 1
+    end
+
+    describe "when I'm logged in as Kneip" do
+      before{ logged_in_as(@user = kneip_user({}, [])) }
+      should_not_prevent_access :get, :index
+      should_not_prevent_access :get, :show, :id =&gt; 1
+      should_not_prevent_access :get, :new
+      should_not_prevent_access :post, :create
+      should_not_prevent_access :put, :update, :id =&gt; 1
+      should_not_prevent_access :delete, :destroy, :id =&gt; 1
+    end
+  end
+
+end
+eos
+end
+print out</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^ </string>
+	<key>name</key>
+	<string>Controller specs with rights</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.ruby.rspec</string>
+	<key>uuid</key>
+	<string>AE1ED606-A3E9-4674-8CAD-86BF32EEED19</string>
+</dict>
+</plist>

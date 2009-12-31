@@ -47,8 +47,7 @@ eos
 if module_name
 out &lt;&lt; &lt;&lt;-eos
     describe "when I'm logged in as client without #{module_name} access" do
-      before(:all) { @user = client_user("ABN AMRO", {}, []) }
-      before{ logged_in_as(@user) }
+      before{ logged_in_as(@user = client_user("ABN AMRO", {}, [])) }
       should_prevent_access :get, :index
       should_prevent_access :get, :show, :id =&gt; 1
       should_prevent_access :get, :new
@@ -58,8 +57,7 @@ out &lt;&lt; &lt;&lt;-eos
     end
 
     describe "when I'm logged in as client with #{module_name} access" do
-      before(:all) { @user = client_user("ABN AMRO", {}, [{:module =&gt; "#{module_name.titleize}", :user_type =&gt; 0}]) }
-      before{ logged_in_as(@user) }
+      before{ logged_in_as(@user = client_user("ABN AMRO", {}, [{:module =&gt; "#{module_name.titleize}", :user_type =&gt; 0}])) }
       should_not_prevent_access :get, :index
       should_not_prevent_access :get, :show, :id =&gt; 1
       should_not_prevent_access :get, :new
@@ -69,8 +67,7 @@ out &lt;&lt; &lt;&lt;-eos
     end
 
     describe "when I'm logged in as Kneip" do
-      before(:all) { @user = kneip_user({}, [{:module =&gt; "#{module_name.titleize}", :user_type =&gt; 0}]) }
-      before{ logged_in_as(@user) }
+      before{ logged_in_as(@user = kneip_user({}, [{:module =&gt; "#{module_name.titleize}", :user_type =&gt; 0}])) }
       should_not_prevent_access :get, :index
       should_not_prevent_access :get, :show, :id =&gt; 1
       should_not_prevent_access :get, :new
@@ -85,8 +82,7 @@ eos
 else
 out &lt;&lt; &lt;&lt;-eos
     describe "when I'm logged in as client" do
-      before(:all) { @user = client_user("ABN AMRO", {}, []) }
-      before{ logged_in_as(@user) }
+      before{ logged_in_as(@user = client_user("ABN AMRO", {}, [])) }
       should_not_prevent_access :get, :index
       should_not_prevent_access :get, :show, :id =&gt; 1
       should_not_prevent_access :get, :new
@@ -96,8 +92,7 @@ out &lt;&lt; &lt;&lt;-eos
     end
 
     describe "when I'm logged in as Kneip" do
-      before(:all) { @user = kneip_user({}, []) }
-      before{ logged_in_as(@user) }
+      before{ logged_in_as(@user = kneip_user({}, [])) }
       should_not_prevent_access :get, :index
       should_not_prevent_access :get, :show, :id =&gt; 1
       should_not_prevent_access :get, :new
