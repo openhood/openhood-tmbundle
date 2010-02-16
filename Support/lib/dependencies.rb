@@ -12,3 +12,5 @@ else
     TextMate.exit_show_tool_tip "Error: Rails not found either frozen or as gem."
   end
 end
+
+require "active_support/core_ext/string"
