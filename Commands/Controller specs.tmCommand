@@ -40,6 +40,7 @@ describe #{controller_class} do
       should_prevent_access :get, :show, :id =&gt; 1
       should_prevent_access :get, :new
       should_prevent_access :post, :create
+      should_prevent_access :get, :edit, :id =&gt; 1
       should_prevent_access :put, :update, :id =&gt; 1
       should_prevent_access :delete, :destroy, :id =&gt; 1
     end
@@ -54,6 +55,7 @@ out &lt;&lt; &lt;&lt;-eos
       should_prevent_access :get, :show, :id =&gt; 1
       should_prevent_access :get, :new
       should_prevent_access :post, :create
+      should_prevent_access :get, :edit, :id =&gt; 1
       should_prevent_access :put, :update, :id =&gt; 1
       should_prevent_access :delete, :destroy, :id =&gt; 1
     end
@@ -64,6 +66,7 @@ out &lt;&lt; &lt;&lt;-eos
       should_not_prevent_access :get, :show, :id =&gt; 1
       should_not_prevent_access :get, :new
       should_not_prevent_access :post, :create
+      should_not_prevent_access :get, :edit, :id =&gt; 1
       should_not_prevent_access :put, :update, :id =&gt; 1
       should_not_prevent_access :delete, :destroy, :id =&gt; 1
     end
@@ -74,6 +77,7 @@ out &lt;&lt; &lt;&lt;-eos
       should_not_prevent_access :get, :show, :id =&gt; 1
       should_not_prevent_access :get, :new
       should_not_prevent_access :post, :create
+      should_not_prevent_access :get, :edit, :id =&gt; 1
       should_not_prevent_access :put, :update, :id =&gt; 1
       should_not_prevent_access :delete, :destroy, :id =&gt; 1
     end
@@ -89,6 +93,7 @@ out &lt;&lt; &lt;&lt;-eos
       should_not_prevent_access :get, :show, :id =&gt; 1
       should_not_prevent_access :get, :new
       should_not_prevent_access :post, :create
+      should_not_prevent_access :get, :edit, :id =&gt; 1
       should_not_prevent_access :put, :update, :id =&gt; 1
       should_not_prevent_access :delete, :destroy, :id =&gt; 1
     end
@@ -99,6 +104,7 @@ out &lt;&lt; &lt;&lt;-eos
       should_not_prevent_access :get, :show, :id =&gt; 1
       should_not_prevent_access :get, :new
       should_not_prevent_access :post, :create
+      should_not_prevent_access :get, :edit, :id =&gt; 1
       should_not_prevent_access :put, :update, :id =&gt; 1
       should_not_prevent_access :delete, :destroy, :id =&gt; 1
     end
