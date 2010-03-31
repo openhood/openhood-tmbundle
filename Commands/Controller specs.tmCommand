@@ -12,9 +12,11 @@ fullpath = File.join(ENV["TM_DIRECTORY"].to_s, ENV["TM_FILENAME"].to_s)
 matches = fullpath.match /\/controllers\/(.*)_controller_spec\.rb\Z/u
 TextMate.exit_show_tool_tip "Error: you don't seem to be in a controller spec." if matches.nil?
 controller_path = matches[1]
+controller_url = controller_path.gsub("corporate_actions", "corporate-actions").gsub("master_file", "masterfile")
 controller_class = "#{controller_path}_controller".classify
 module_name = controller_class[/([^:]+)::.+/, 1]
 module_name = module_name.underscore if module_name
+module_title = module_name.titleize.gsub("Master File", "Masterfile")
 
 out = &lt;&lt;-eos
 require File.dirname(__FILE__) + "/#{"../" * controller_path.split("/").size}spec_helper"
@@ -23,13 +25,13 @@ describe #{controller_class} do
   include ActionAccessMatchers
 
   describe "routes" do
-    should_route :get, "/#{controller_path}", :controller =&gt; "#{controller_path}", :action =&gt; :index
-    should_route :get, "/#{controller_path}/1", :controller =&gt; "#{controller_path}", :action =&gt; :show, :id =&gt; 1
-    should_route :get, "/#{controller_path}/new", :controller =&gt; "#{controller_path}", :action =&gt; :new
-    should_route :post, "/#{controller_path}", :controller =&gt; "#{controller_path}", :action =&gt; :create
-    should_route :get, "/#{controller_path}/1/edit", :controller =&gt; "#{controller_path}", :action =&gt; :edit, :id =&gt; 1
-    should_route :put, "/#{controller_path}/1", :controller =&gt; "#{controller_path}", :action =&gt; :update, :id =&gt; 1
-    should_route :delete, "/#{controller_path}/1", :controller =&gt; "#{controller_path}", :action =&gt; :destroy, :id =&gt; 1
+    should_route :get, "/#{controller_url}", :controller =&gt; "#{controller_path}", :action =&gt; :index
+    should_route :get, "/#{controller_url}/1", :controller =&gt; "#{controller_path}", :action =&gt; :show, :id =&gt; 1
+    should_route :get, "/#{controller_url}/new", :controller =&gt; "#{controller_path}", :action =&gt; :new
+    should_route :post, "/#{controller_url}", :controller =&gt; "#{controller_path}", :action =&gt; :create
+    should_route :get, "/#{controller_url}/1/edit", :controller =&gt; "#{controller_path}", :action =&gt; :edit, :id =&gt; 1
+    should_route :put, "/#{controller_url}/1", :controller =&gt; "#{controller_path}", :action =&gt; :update, :id =&gt; 1
+    should_route :delete, "/#{controller_url}/1", :controller =&gt; "#{controller_path}", :action =&gt; :destroy, :id =&gt; 1
   end
 
   describe "access rights" do
@@ -57,7 +59,7 @@ out &lt;&lt; &lt;&lt;-eos
     end
 
     describe "when I'm logged in as client with #{module_name} access" do
-      before{ logged_in_as(@user = client_user("ABN AMRO", {}, [{:module =&gt; "#{module_name.titleize}", :user_type =&gt; 0}])) }
+      before{ logged_in_as(@user = client_user("ABN AMRO", {}, [{:module =&gt; "#{module_title}", :user_type =&gt; 0}])) }
       should_not_prevent_access :get, :index
       should_not_prevent_access :get, :show, :id =&gt; 1
       should_not_prevent_access :get, :new
@@ -67,7 +69,7 @@ out &lt;&lt; &lt;&lt;-eos
     end
 
     describe "when I'm logged in as Kneip" do
-      before{ logged_in_as(@user = kneip_user({}, [{:module =&gt; "#{module_name.titleize}", :user_type =&gt; 0}])) }
+      before{ logged_in_as(@user = kneip_user({}, [{:module =&gt; "#{module_title}", :user_type =&gt; 0}])) }
       should_not_prevent_access :get, :index
       should_not_prevent_access :get, :show, :id =&gt; 1
       should_not_prevent_access :get, :new

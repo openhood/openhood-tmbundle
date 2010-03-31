@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>"([^"]+)"</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Usual matching regexp</string>
+	<key>scope</key>
+	<string>source.ruby, source.ruby.rails</string>
+	<key>uuid</key>
+	<string>A3A30139-A02B-478E-B6F3-E91ADF26AD48</string>
+</dict>
+</plist>
