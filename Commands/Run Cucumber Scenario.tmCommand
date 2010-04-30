@@ -6,6 +6,10 @@
 	<string>saveActiveFile</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
+
+bundler_env = File.join(ENV['TM_PROJECT_DIRECTORY'],"vendor/bundler_gems/environment")
+require bundler_env if File.exists?("#{bundler_env}.rb")
+
 require File.join(ENV["TM_SUPPORT_PATH"], "lib", "exit_codes")
 require File.join(ENV["TM_BUNDLE_SUPPORT"], "lib", "dependencies")
 TextMate.exit_show_tool_tip "Error: you must be inside a Rails project to use this command." if ENV["TM_PROJECT_DIRECTORY"].blank?
@@ -29,7 +33,7 @@ TextMate.exit_show_html `#{cmd}`</string>
 	<key>output</key>
 	<string>discard</string>
 	<key>scope</key>
-	<string>text.cucumber.feature</string>
+	<string>text.cucumber.feature,text.gherkin.feature</string>
 	<key>uuid</key>
 	<string>93BC47AA-DC38-4617-925D-63432612A00B</string>
 </dict>

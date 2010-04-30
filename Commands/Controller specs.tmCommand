@@ -6,6 +6,10 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby
+
+bundler_env = File.join(ENV['TM_PROJECT_DIRECTORY'],"vendor/bundler_gems/environment")
+require bundler_env if File.exists?("#{bundler_env}.rb")
+
 require File.join(ENV["TM_SUPPORT_PATH"], "lib", "exit_codes")
 require File.join(ENV["TM_BUNDLE_SUPPORT"], "lib", "dependencies")
 fullpath = File.join(ENV["TM_DIRECTORY"].to_s, ENV["TM_FILENAME"].to_s)

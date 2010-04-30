@@ -7,7 +7,7 @@
 	<key>name</key>
 	<string>Show me the page</string>
 	<key>scope</key>
-	<string>text.cucumber.feature</string>
+	<string>text.cucumber.feature,text.gherkin.feature</string>
 	<key>tabTrigger</key>
 	<string>show</string>
 	<key>uuid</key>
