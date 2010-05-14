@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>
+# ~~~ constants ~~~
+
+# ~~~ virtual attributes ~~~
+
+# ~~~ keys ~~~
+
+# ~~~ links ~~~
+
+# ~~~ plugins ~~~
+
+# ~~~ validations ~~~
+
+# ~~~ before/after filters ~~~
+
+# ~~~ state machine ~~~
+
+# ~~~ events ~~~
+
+# ~~~ custom class methods ~~~
+
+# ~~~ custom instance methods ~~~
+</string>
+	<key>keyEquivalent</key>
+	<string>^ </string>
+	<key>name</key>
+	<string>MongoMapper comments</string>
+	<key>scope</key>
+	<string>source.ruby, source.ruby.rails</string>
+	<key>uuid</key>
+	<string>B1C47789-74B4-48C5-BCCD-11AEAFBB972D</string>
+</dict>
+</plist>
