@@ -5,12 +5,22 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby
+	<string>#!/usr/bin/env bash
+
+. "$TM_BUNDLE_SUPPORT/lib/rvm_textmate" &gt; /dev/null
+
+cat &lt;&lt;'RUBYEOF' &gt; /tmp/openhood-$$.rb
+
+require ENV['TM_BUNDLE_SUPPORT'] + "/lib/openhood/mate"
+require ENV["TM_SUPPORT_PATH"] + "/lib/exit_codes"
+  
 list = []
 list &lt;&lt; "`@_/ºº REALLY TOO "
 list &lt;&lt; "`_@/ºº S...L..O.. "
 list &lt;&lt; "°l°(,,,,); DAMNLY "
-puts "# FIXME " + list.sort_by{ rand }.shift + "SLOW\n"</string>
+puts "# FIXME " + list.sort_by{ rand }.shift + "SLOW\n"
+RUBYEOF
+${TM_RUBY:-ruby} -W0 -Ku /tmp/openhood-$$.rb; exit_status=$?; rm /tmp/openhood-$$.rb; exit $exit_status</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

@@ -5,13 +5,15 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby
+	<string>#!/usr/bin/env bash
 
-bundler_env = File.join(ENV['TM_PROJECT_DIRECTORY'],"vendor/bundler_gems/environment")
-require bundler_env if File.exists?("#{bundler_env}.rb")
+. "$TM_BUNDLE_SUPPORT/lib/rvm_textmate" &gt; /dev/null
 
-require File.join(ENV["TM_SUPPORT_PATH"], "lib", "exit_codes")
-require File.join(ENV["TM_BUNDLE_SUPPORT"], "lib", "dependencies")
+cat &lt;&lt;'RUBYEOF' &gt; /tmp/openhood-$$.rb
+
+require ENV['TM_BUNDLE_SUPPORT'] + "/lib/openhood/mate"
+require ENV["TM_SUPPORT_PATH"] + "/lib/exit_codes"
+
 fullpath = File.join(ENV["TM_DIRECTORY"].to_s, ENV["TM_FILENAME"].to_s)
 matches = fullpath.match /\/controllers\/(.*)_controller_spec\.rb\Z/u
 TextMate.exit_show_tool_tip "Error: you don't seem to be in a controller spec." if matches.nil?
@@ -20,7 +22,7 @@ controller_url = controller_path.gsub("corporate_actions", "corporate-actions").
 controller_class = "#{controller_path}_controller".classify
 module_name = controller_class[/([^:]+)::.+/, 1]
 module_name = module_name.underscore if module_name
-module_title = module_name.titleize.gsub("Master File", "Masterfile")
+module_title = module_name.titleize.gsub("Master File", "Masterfile").gsub("Clearstream","Isin Request")
 
 out = &lt;&lt;-eos
 require File.dirname(__FILE__) + "/#{"../" * controller_path.split("/").size}spec_helper"
@@ -117,7 +119,9 @@ out &lt;&lt; &lt;&lt;-eos
 end
 eos
 end
-print out</string>
+print out
+RUBYEOF
+${TM_RUBY:-ruby} -W0 -Ku /tmp/openhood-$$.rb; exit_status=$?; rm /tmp/openhood-$$.rb; exit $exit_status</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>

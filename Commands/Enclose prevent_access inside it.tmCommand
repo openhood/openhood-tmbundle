@@ -5,20 +5,24 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby
+	<string>#!/usr/bin/env bash
 
-bundler_env = File.join(ENV['TM_PROJECT_DIRECTORY'],"vendor/bundler_gems/environment")
-require bundler_env if File.exists?("#{bundler_env}.rb")
+. "$TM_BUNDLE_SUPPORT/lib/rvm_textmate" &gt; /dev/null
 
-require File.join(ENV["TM_SUPPORT_PATH"], "lib", "exit_codes")
-require File.join(ENV["TM_BUNDLE_SUPPORT"], "lib", "dependencies")
+cat &lt;&lt;'RUBYEOF' &gt; /tmp/openhood-$$.rb
+
+require ENV['TM_BUNDLE_SUPPORT'] + "/lib/openhood/mate"
+require ENV["TM_SUPPORT_PATH"] + "/lib/exit_codes"
+
 puts $stdin.read.split("\n").collect{|line|
   if line =~ /^(\s+)should(_not)?_prevent_access (.*)$/
     "#{$1}it{ should#{$2} prevent_access(#{$3.strip}) }"
   else
     line
   end
-}.join("\n")</string>
+}.join("\n")
+RUBYEOF
+${TM_RUBY:-ruby} -W0 -Ku /tmp/openhood-$$.rb; exit_status=$?; rm /tmp/openhood-$$.rb; exit $exit_status</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>
